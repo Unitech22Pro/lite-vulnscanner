@@ -1,0 +1,44 @@
+import socket
+from datetime import datetime
+
+target = input("Enter IP or hostname to scan: ")
+ports = [21, 22, 80, 443, 8080, 3306, 3389]
+
+# Prepare to collect results
+open_ports = []
+start_time = datetime.now()
+
+print(f"\n[+] Starting scan on {target}...\n")
+
+for port in ports:
+    try:
+        sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        sock.settimeout(1)
+        result = sock.connect_ex((target, port))
+        if result == 0:
+            print(f"[+] Port {port} is OPEN")
+            open_ports.append(port)
+        sock.close()
+    except socket.error:
+        print(f"[-] Could not connect to port {port}")
+
+end_time = datetime.now()
+duration = end_time - start_time
+
+# Save report to text file
+report_file = "scan_report.txt"
+with open(report_file, "w") as file:
+    file.write("Vulnerability Scanner Report\n")
+    file.write("=============================\n")
+    file.write(f"Target: {target}\n")
+    file.write(f"Scan Date: {start_time.strftime('%Y-%m-%d %H:%M:%S')}\n")
+    file.write(f"Scan Duration: {duration}\n\n")
+    
+    if open_ports:
+        file.write("Open Ports:\n")
+        for port in open_ports:
+            file.write(f"- Port {port} is OPEN\n")
+    else:
+        file.write("No open ports found.\n")
+
+print(f"\n[+] Scan complete! Report saved to '{report_file}'.")

@@ -1,0 +1,7 @@
+Vulnerability Scanner Report
+=============================
+Target: 192.168.X.X
+Scan Date: 2025-07-12 01:08:31
+Scan Duration: 0:00:07.048843
+
+No open ports found.
